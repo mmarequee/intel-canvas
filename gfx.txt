@@ -1,0 +1,122 @@
+16 means we assume a max of 16 CRTCs, Encoders, Connectors, Props, Framebuffers, Modes ...
+4 means Framebuffers, CRTCs, Encoders, Connectors for graphics card resources
+We have to allocate memory for all the pointers in gfx_resources_ptr, gfx_connector_ptr, gfx_crtc_ptr, gfx_encoder_ptr, ...
+Instead we allocate a big pool of memory and work out a format and calculation of corresponding pointer jumps and memlocs
+First we store Connector, Encoder, CRTC, Mode, ... structs and then corresponding IDs (up to 128)
+Next we calculate the actual size of the entire memory used to store gfx card resources and call realloc()
+e.g. GFX_SIZEOF_RESOURCES + 0...+ 16 * 4 * 1...+ 16 * 4 * 2...+16 * 4 * 3
+First get the number of FBs, CRTCs, Connectors, and Encoders
+Now fetch the IDs via Pointers we send
+We have to read out sequence of connector IDs determined by
+number of connectors and connector IDs pointed to by 64-bit pointer
+For each connector ID pointed to by 64-bit pointer
+fill the position gfx_connector_ptr + 48 which is the Connector ID
+with the corresponding connector ID then get the requested information	
+For each connector ID pointed to by connector_ID_ptr stored in resources structure pointed to by resources_ptr do 
+Pass the pointer to mode structure
+/* Graphics Card Regions: */
+
+/* Graphics card resources: Allocate 64 bytes for: 
+	64-bit Pointer to:
+	- FrameBuffers
+	- CRTCs
+	- Connectors
+	- Encoders
+	32-bit Number of
+	- Framebuffers
+	- CRTCs
+	- Connectors
+	- Encoders
+	Min Width
+	Max Width
+	Min Height
+	Max Height
+*/
+
+/* Graphics card connector: Allocate 76 bytes for: 
+	64-bit Pointer to:
+	- Encoders
+	- Modes
+	- Properties
+	- Property Values
+	32-bit Number of
+	- Modes
+	- Props
+	- Encoders
+	Current Encoder ID
+	Connector ID
+	Connector Type
+	Connector Type ID
+	Connection
+	Width in mm
+	Height in mm
+	Subpixel
+*/
+
+
+/* Graphics card Encoder: Allocate 20 bytes for: 
+	Encoder ID
+	Encoder Type
+	CRTC ID
+	Possible CRTCs
+	Possible Clones
+*/
+
+
+/* Graphics card CRTC: Allocate 104 bytes for:
+	Pointer to connectors set
+	32-bit number of connectors
+	u32 CRTC ID
+	u32 FrameBuffer ID
+	u32 x position within FrameBuffer
+	u32 y position within FrameBuffer
+	u32 gamma_size
+	u32 mode_valid
+	68 bytes for Graphics card Mode info (see below)
+*/
+
+/* Graphics card Mode info: Allocate 68 bytes for:
+	u32 clock
+	u16 hdisplay, hsync_start, hsync_end, htotal, hskew
+	u16 vdisplay, vsync_start, vsync_end, vtotal, vscan
+	u32 vrefresh
+	u32 flags
+	u32 type
+	char name[NAME_LEN]
+*/
+
+/* Graphics card Properties: Allocate 64 bytes for:
+	64-bit pointer to:
+	- values and blob lengths
+	- enum and blob id ptrs
+	u32 property ID
+	u32 flags
+	char name[NAME_LEN]
+	u32 number of values
+	u32 number of enum blobs
+*/
+
+/* Framebuffer command struct:
+	u32 ID
+	u32 width
+	u32 height
+	u32 pitch
+	u32 bpp
+	u32 depth
+	u32 handle
+*/
+
+/* CRTC Page Flip struct:
+	u32 CRTC ID
+	u32 FB ID
+	u32 flags
+	u32 reserved
+	u64 user_data
+*/
+
+
+/* Intel GEM Create:
+	u64 size
+	u32 handle
+	u32 pad
+*/
