@@ -1,11 +1,64 @@
-<html lang="en">
-<head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial scale=1.0">
- <title>intel-canvas</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="DigitiZEN">
+	<meta name="keywords" content="audio, digitization, digitisation, preservation, archive, archives, archiving">
+	<meta name="google-site-verification" content="tOjh-OhjoukGuHwN6V_Bumdb0QooZnxk2lq28qVoHJY" />
+	<title>DigitiZEN</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding:0;
+            background: #fff center center repeat-y;
+        }
+        
+        #contents {
+            margin: auto;
+            text-align: center;
+            width: 550px;
+            max-width: 550px;
+            border-left: 1px solid #fff;
+	        border-right: 1px solid #fff;
+        }
+
+        
+        .message {
+	        background: #6EA7D5 url(img/digitizen.png) center no-repeat;
+            color: #FFF;
+	        margin-bottom: 0;
+            padding: 10px;
+	        font-weight: bold;
+            font-size: 120%;
+            font-style: normal;
+            text-align: center;
+            text-shadow: black 1px 1px 1px #333
+        }
+
+    </style>
 </head>
 <body>
- <h1> Intel Canvas </h1>
- <p>A small piece of code for switching into graphics mode /dev/dri/cardX for intel based graphics cards. Compile with gcc -o gfx main.c gfx.c</p>
-</body>
-</html>
+    <div id="contents"> 
+       <div class="message">
+ 	    <h1 style="color: #fff">DigitiZEN</h1>
+ 	    <p>An audio digitization tool.</p>
+   </div>
+    </div><div  id="contents" style="border: 1px solid #FFF; background:#fff; color: #000;text-align: justify;"><p>Digitizen is a simple audio digitizing application.
+
+<p>Its main purpose is very fast preservation of audio materials(up to 16 or more analog machines in parallel), fast search and retrieval via signatures for research and use of such audio materials.</p>
+<p>Its telnet based CLI (command line interface) allows for independent recording of preconfigured 8 channels or 4 stereo streams of audio on a custom Linux kernel(or more, theoretically up to 16 or more stereo streams with a special USB audio driver since the CPU isn’t burdened with unnecessary DSP analysis algorithms as the use of such algorithms can be postponed until after the actual digitization had been done and either batch executed or used as plugins in audio restoration software afterwards).</p>
+
+<p>Its tiny source code (under 60kb) makes it easy to study, optimize and adjust it to specific needs.</p> 
+<p>In 2009 digitizen was able to digitize more than 438 hours of audio, running for several hours each day, during a three months session.</p>
+
+<a href="img/digitizen_session.jpg">Here's a picture of a digitizen session with 3 STUDER A80 analog machines</a>
+
+<p>You can view the source code <a href="img/digitizen_session.jpg">here.</a> Compile with -ljack -lpthread.</p>
+<p>Atomic.h was inspired by atomic.h code written by Stephane Letz and peak.c was “stolen” from <a href="https://ardour.org/">Ardour</a> and commented upon. Digitizen was written to run as a <a href="https://jackaudio.org/">Jack</a> client.</p>
+
+<p>The checksum output created by digitizen is compatible with <a href="https://cfv.sourceforge.net">cfv</a> which was run after each session in order to make sure that the raw audio data had been correctly recorded. The actual output of digitizen is 8 raw 32-bit normalized float mono streams which can be converted to 24-bit interleaved by a helper program.</p>
+
+<p>The idea was to write a usb audio driver which would output all audio data in 24-bit format directly to digitizen since digitizen checksums all received audio data. A helper program would then batch check the resulting .wav file batch interleaved by another helper program, by deinterleaving and recalculating the checksums of two mono streams, then batch comparing these checksums against digitizen created checksums.</p>
+
+<p>Digitizen comes with ABSOLUTELY NO WARRANTY.</p>
+	        </div>
+</body></html>
